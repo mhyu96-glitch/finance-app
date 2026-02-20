@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Financial App - Ledger</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        (function () {
+            const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            if (theme === 'dark') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#6366f1",
+                        secondary: "#a855f7",
+                        accent: "#2dd4bf",
+                        dark: "#0a0a0c",
+                        card: "rgba(255, 255, 255, 0.03)"
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                    }
+                },
+            },
+        };
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+    body {
+        @apply bg-white dark:bg-[#0a0a0c] text-slate-600 dark:text-slate-300 font-body antialiased selection:bg-indigo-500/30;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+            radial-gradient(at 50% 50%, rgba(45, 212, 191, 0.03) 0px, transparent 50%);
+    }
+    .dark body {
+        @apply bg-[#0a0a0c] text-slate-300;
+        background-image: 
+            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+            radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+    }
+    .dark {
+        color-scheme: dark;
+    }
+}
+    </style>
+
+    <style type="text/tailwindcss">
+        .glass {
+            @apply bg-white/80 dark:bg-white/[0.02] backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.02)] transition-all duration-500;
+        }
+        .mesh-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #2dd4bf 100%);
+            background-size: 200% 200%;
+            animation: gradientMove 10s infinite alternate;
+        }
+        .sidebar-glass {
+            @apply bg-slate-50/70 dark:bg-[#0a0a0c]/40 backdrop-blur-3xl border-r border-black/5 dark:border-white/5;
+        }
+        .active-nav {
+            @apply text-primary dark:text-white relative;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+        }
+        .dark .active-nav {
+            text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+        }
+        .active-nav::after {
+            content: '';
+            @apply absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
+        }
+        
+        /* Sidebar Structure */
+        #sidebar { 
+            width: 17rem; 
+            transition: width 0.4s cubic-bezier(0.2, 0, 0, 1);
+            overflow-x: hidden;
+            overflow-y: auto;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        #sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        #sidebar::-webkit-scrollbar-thumb {
+            background-color: rgba(99, 102, 241, 0.1);
+            border-radius: 20px;
+        }
+        .dark #sidebar::-webkit-scrollbar-thumb {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        #sidebar.collapsed { width: 5.5rem; }
+        #main-content { 
+            margin-left: 17rem; 
+            transition: margin-left 0.4s cubic-bezier(0.2, 0, 0, 1);
+            width: auto;
+        }
+        #main-content.collapsed { margin-left: 5.5rem; }
+
+        /* Sidebar Item Transitions */
+        .sidebar-item-text, .logo-text, .theme-text, .sidebar-label, .sidebar-footer-card { 
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        /* Collapsed State Styling */
+        .collapsed .sidebar-item-text, 
+        .collapsed .logo-text, 
+        .collapsed .theme-text, 
+        .collapsed .sidebar-label, 
+        .collapsed .sidebar-footer-card { 
+            opacity: 0;
+            display: none !important; 
+            pointer-events: none;
+        }
+
+        .collapsed .nav-link { 
+            @apply px-0 justify-center w-10 mx-auto;
+            border-radius: 0.75rem;
+        }
+        
+        .collapsed .logo-container { 
+            @apply flex-col gap-6 px-0 py-8 justify-start items-center;
+        }
+        
+        .collapsed .logo-container .logo-title { display: none; }
+        
+        /* Ensure toggle button is visible and centered in collapsed mode */
+        .collapsed .sidebar-header-toggle {
+            @apply flex items-center justify-center p-2 rounded-xl bg-white/5 hover:bg-white/10;
+        }
+        
+        .collapsed .nav-link span:first-child { margin-right: 0; }
+
+        #sidebar.hidden-total { 
+            transform: translateX(-100%);
+            width: 0 !important;
+            border-right: none;
+        }
+
+        #main-content.full-width { 
+            margin-left: 0 !important; 
+        }
+
+        #sidebar-show-trigger {
+            @apply fixed top-6 right-6 z-[60] w-12 h-12 glass rounded-2xl flex items-center justify-center text-primary shadow-xl hover:scale-110 active:scale-95 transition-all;
+        }
+
+        /* Responsive / Drawer Mobile */
+        @media (max-width: 1024px) {
+            #sidebar { position: fixed; left: -100% !important; width: 17rem !important; }
+            #sidebar.active { left: 0 !important; }
+            #main-content { margin-left: 0 !important; }
+            .sidebar-header-toggle { display: block; } 
+        }
+
+        #sidebar-scrim {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* --- Advanced Micro-Animations --- */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hover-lift {
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        .stagger-6 { animation-delay: 0.6s; }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .animate-shimmer {
+            animation: shimmer 3s infinite linear;
+        }
+
+        /* Private Mode (Stealth Mode) Styles */
+        .private-mode .sensitive-data {
+            filter: blur(12px) !important;
+            user-select: none !important;
+            pointer-events: none !important;
+            transition: filter 0.3s ease;
+        }
+
+        /* Ledger Table Styles */
+        .ledger-row {
+            @apply border-b border-black/5 dark:border-white/5 hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors;
+        }
+        .type-pill {
+            @apply px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex">
+
+    <!-- Scrim for Mobile Sidebar -->
+    <div id="sidebar-scrim" onclick="FinancialApp.toggleMobileMenu()" class="fixed inset-0 z-40 hidden"></div>
+
+    <!-- Floating Trigger for Hidden Sidebar -->
+    <button id="sidebar-show-trigger" class="hidden" onclick="FinancialApp.toggleSidebarHide()" title="Show Sidebar">
+        <span class="material-symbols-outlined">menu_open</span>
+    </button>
+
+    <!-- Sidebar -->
+    <aside class="sidebar-glass h-screen fixed left-0 top-0" id="sidebar">
+        <div class="p-8 flex items-center justify-between gap-3 logo-container w-full">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 mesh-gradient rounded-xl flex items-center justify-center text-white shadow-lg shrink-0">
+                    <span class="material-symbols-outlined">payments</span>
+                </div>
+                <h1
+                    class="hidden lg:block font-display font-extrabold text-2xl tracking-tighter text-slate-900 dark:text-white logo-text logo-title">
+                    FINANCIAL APP</h1>
+            </div>
+            <button onclick="FinancialApp.toggleSidebar()"
+                class="sidebar-header-toggle p-1.5 text-slate-400 hover:text-primary dark:hover:text-white rounded-lg transition-colors"
+                title="Collapse Sidebar">
+                <span class="material-symbols-outlined text-xl" id="toggle-icon">chevron_left</span>
+            </button>
+            <button onclick="FinancialApp.toggleSidebarHide()"
+                class="sidebar-header-toggle p-1.5 text-slate-400 hover:text-rose-500 rounded-lg transition-colors"
+                title="Hide Sidebar Entirely">
+                <span class="material-symbols-outlined text-xl">visibility_off</span>
+            </button>
+        </div>
+        <nav class="flex-1 px-4 mt-4 space-y-6">
+            <div class="space-y-1">
+                <p
+                    class="sidebar-label hidden lg:block px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">
+                    Main Menu</p>
+                <a class="nav-link flex items-center gap-4 p-4 text-slate-400 hover:text-white transition-all group rounded-xl"
+                    href="index.html">
+                    <span class="material-symbols-outlined shrink-0">dashboard</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="dashboard">Dashboard</span>
+                </a>
+                <a class="nav-link flex items-center gap-4 p-4 text-slate-400 hover:text-white transition-all group rounded-xl"
+                    href="analytics.html">
+                    <span class="material-symbols-outlined shrink-0">monitoring</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="reports">Reports</span>
+                </a>
+                <a class="active-nav nav-link flex items-center gap-4 p-4 rounded-xl transition-all group"
+                    href="ledger.html">
+                    <span class="material-symbols-outlined shrink-0">list_alt</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="ledger">Ledger</span>
+                </a>
+                <a class="nav-link flex items-center gap-4 p-4 text-slate-400 hover:text-white transition-all group rounded-xl"
+                    href="strategy.html">
+                    <span class="material-symbols-outlined shrink-0">insights</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="strategy">Strategy</span>
+                </a>
+                <a class="nav-link flex items-center gap-4 p-4 text-slate-400 hover:text-white transition-all group rounded-xl"
+                    href="services.html">
+                    <span class="material-symbols-outlined shrink-0">auto_awesome</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="services">Services</span>
+                </a>
+                <a class="nav-link flex items-center gap-4 p-4 text-slate-400 hover:text-white transition-all group rounded-xl"
+                    href="budgets.html">
+                    <span class="material-symbols-outlined shrink-0">savings</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="budgets">Budgets</span>
+                </a>
+                <a class="nav-link flex items-center gap-4 p-4 text-slate-400 hover:text-white transition-all group rounded-xl"
+                    href="accounts.html">
+                    <span class="material-symbols-outlined shrink-0">credit_card</span>
+                    <span class="font-semibold sidebar-item-text" data-i18n="accounts">Accounts</span>
+                </a>
+            </div>
+            <div class="space-y-1 pt-4 border-t border-white/5">
+                <p
+                    class="sidebar-label hidden lg:block px-4 text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4">
+                    Appearance</p>
+                <button
+                    class="nav-link flex items-center gap-4 p-4 text-slate-400 w-full hover:text-white transition-all group rounded-xl text-left"
+                    onclick="FinancialApp.toggleTheme()">
+                    <span class="material-symbols-outlined shrink-0">dark_mode</span>
+                    <span class="hidden lg:block font-semibold theme-text">Toggle Theme</span>
+                </button>
+                <button
+                    class="nav-link flex items-center gap-4 p-4 text-slate-400 w-full hover:text-white transition-all group rounded-xl text-left"
+                    onclick="FinancialApp.togglePrivateMode()">
+                    <span class="material-symbols-outlined shrink-0">visibility_off</span>
+                    <span class="hidden lg:block font-semibold theme-text">Private Mode</span>
+                </button>
+            </div>
+        </nav>
+        <div class="sidebar-footer-card flex flex-col items-center p-8">
+            <div class="w-full glass p-6 rounded-[2rem] border-white/5 bg-white/[0.02]">
+                <div class="flex items-center gap-2 text-primary mb-2">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                    <span class="text-[10px] font-bold uppercase tracking-widest">Financial App Pro</span>
+                </div>
+                <p class="text-[10px] text-slate-500 mb-4 leading-relaxed font-medium">Laporan fractal cerdas aktif.</p>
+                <button
+                    class="w-full bg-white text-black py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-wider hover:bg-slate-100 transition-colors shadow-lg shadow-white/5">Upgrade</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="p-6 lg:p-10 flex-1" id="main-content">
+        <header
+            class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4 animate-fade-in-up">
+            <div>
+                <h2 class="text-4xl font-display font-extrabold text-slate-900 dark:text-white tracking-tight"
+                    data-i18n="ledger_header">
+                    Transaction Ledger</h2>
+                <p class="text-slate-500 font-medium mt-1 uppercase text-[10px] tracking-widest font-bold"
+                    data-i18n="ledger_desc">Deep Data
+                    Analysis Hub</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="LedgerPage.exportToPDF()"
+                    class="flex items-center gap-2 px-6 py-3 bg-white text-black dark:bg-white/10 dark:text-white rounded-2xl text-[10px] font-black uppercase tracking-wider hover:scale-105 transition-all shadow-xl shadow-indigo-500/5">
+                    <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+                    <span data-i18n="export_pdf">Export PDF</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Search & Filters Bar -->
+        <div
+            class="glass p-6 rounded-[2.5rem] border-white/5 mb-8 flex flex-col lg:flex-row gap-6 items-center animate-fade-in-up stagger-1">
+            <div class="flex-1 w-full relative">
+                <span
+                    class="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input type="text" id="ledger-search"
+                    class="w-full bg-black/5 dark:bg-white/5 border-none rounded-2xl py-4 pl-14 pr-6 text-sm focus:ring-2 focus:ring-primary/20 transition-all"
+                    placeholder="Search by transaction name or provider..."
+                    data-i18n-placeholder="search_ledger_placeholder" oninput="LedgerPage.filterTransactions()">
+            </div>
+            <div class="flex items-center gap-4 w-full lg:w-auto">
+                <select id="filter-category" onchange="LedgerPage.filterTransactions()"
+                    class="bg-black/5 dark:bg-white/5 border-none rounded-2xl py-4 px-6 text-[10px] font-black uppercase tracking-wider focus:ring-2 focus:ring-primary/20 cursor-pointer">
+                    <option value="" data-i18n="all_categories">All Categories</option>
+                </select>
+                <select id="filter-type" onchange="LedgerPage.filterTransactions()"
+                    class="bg-black/5 dark:bg-white/5 border-none rounded-2xl py-4 px-6 text-[10px] font-black uppercase tracking-wider focus:ring-2 focus:ring-primary/20 cursor-pointer">
+                    <option value="" data-i18n="all_types">All Types</option>
+                    <option value="income" data-i18n="income">Income</option>
+                    <option value="expense" data-i18n="expense">Expense</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Transaction Table Container -->
+        <div class="glass rounded-[2.5rem] border-white/5 overflow-hidden animate-fade-in-up stagger-2"
+            id="report-area">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr class="bg-black/5 dark:bg-white/5">
+                            <th class="p-8 text-[10px] font-black uppercase tracking-widest text-slate-500"
+                                data-i18n="date">Date</th>
+                            <th class="p-8 text-[10px] font-black uppercase tracking-widest text-slate-500"
+                                data-i18n="transaction">Transaction
+                            </th>
+                            <th class="p-8 text-[10px] font-black uppercase tracking-widest text-slate-500"
+                                data-i18n="category">Category
+                            </th>
+                            <th class="p-8 text-[10px] font-black uppercase tracking-widest text-slate-500"
+                                data-i18n="account">Account</th>
+                            <th class="p-8 text-[10px] font-black uppercase tracking-widest text-slate-500 text-right"
+                                data-i18n="amount">
+                                Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ledger-body">
+                        <!-- Rows dynamically generated -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State -->
+            <div id="ledger-empty" class="hidden p-20 flex flex-col items-center justify-center text-center">
+                <div class="w-20 h-20 bg-slate-100 dark:bg-white/5 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-symbols-outlined text-4xl text-slate-300">search_off</span>
+                </div>
+                <h4 class="text-xl font-display font-bold text-slate-400" data-i18n="no_transactions">No transactions
+                    found</h4>
+                <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-2" data-i18n="adjust_filters">Adjust
+                    your filters and try again.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script type="module" src="src/js/main.js"></script>
+</body>
+
+</html>
