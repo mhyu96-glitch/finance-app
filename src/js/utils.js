@@ -83,6 +83,21 @@ export const applyCurrencyFormatting = (inputEl) => {
 };
 
 /**
+ * Parse IDR string back to number
+ * @param {string} value 
+ * @returns {number}
+ */
+export const parseIDR = (value) => {
+    if (!value) return 0;
+    return parseFloat(value.toString().replace(/[^0-9]/g, '')) || 0;
+};
+
+/**
+ * Alias for formatNumberWithDots for compatibility
+ */
+export const formatNumber = (value) => formatNumberWithDots(value);
+
+/**
  * Returns a random brand color name
  * @returns {string} color name
  */
