@@ -15,6 +15,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
+    <link href="src/css/premium.css" rel="stylesheet" />
     <script>
         (function () {
             const theme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -77,29 +78,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
-        .aura {
-            @apply absolute w-64 h-64 rounded-full blur-[120px] pointer-events-none opacity-20 dark:opacity-40 animate-pulse;
-        }
-        .mesh-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #2dd4bf 100%);
-            background-size: 200% 200%;
-            animation: gradientMove 10s infinite alternate;
-        }
-        .sidebar-glass {
-            @apply bg-slate-50/70 dark:bg-[#0a0a0c]/40 backdrop-blur-3xl border-r border-black/5 dark:border-white/5;
-        }
-        .active-nav {
-            @apply text-primary dark:text-white relative;
-            text-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
-        }
-        .dark .active-nav {
-            text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
-        }
-        .active-nav::after {
-            content: '';
-            @apply absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full;
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
-        }
+        /* Core Premium styles moved to src/css/premium.css */
         
         /* Sidebar Structure */
         /* Sidebar Structure - Unified */

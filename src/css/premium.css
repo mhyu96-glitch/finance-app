@@ -1,0 +1,123 @@
+/* Finance Flow Premium Design System */
+
+@layer components {
+    .glass {
+        @apply bg-white/80 dark:bg-white/[0.02] backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-[0_8px_32px_rgba(0, 0, 0, 0.02)] transition-all duration-500;
+    }
+
+    .glass-premium {
+        @apply relative overflow-hidden;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+        backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .glass-premium::before {
+        content: '';
+        @apply absolute -top-[50%] -left-[50%] w-[200%] h-[200%] rotate-45 pointer-events-none;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+        animation: shine 8s infinite linear;
+    }
+
+    .sidebar-glass {
+        @apply bg-slate-50/80 dark:bg-[#0a0a0c]/60 backdrop-blur-2xl border-r border-black/5 dark:border-white/5;
+    }
+
+    .mesh-gradient {
+        background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #2dd4bf 100%);
+        background-size: 200% 200%;
+        animation: gradientMove 10s infinite alternate;
+    }
+
+    .active-nav {
+        @apply text-primary dark:text-white relative;
+        text-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+
+    .dark .active-nav {
+        text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+    }
+
+    .active-nav::after {
+        content: '';
+        @apply absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full;
+        box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
+    }
+}
+
+@keyframes shine {
+    from {
+        transform: translateX(-100%) rotate(45deg);
+    }
+
+    to {
+        transform: translateX(100%) rotate(45deg);
+    }
+}
+
+@keyframes gradientMove {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: 100% 100%;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+.stagger-1 {
+    animation-delay: 0.1s;
+}
+
+.stagger-2 {
+    animation-delay: 0.2s;
+}
+
+.stagger-3 {
+    animation-delay: 0.3s;
+}
+
+.stagger-4 {
+    animation-delay: 0.4s;
+}
+
+.stagger-5 {
+    animation-delay: 0.5s;
+}
+
+.stagger-6 {
+    animation-delay: 0.6s;
+}
