@@ -38,17 +38,19 @@ self.addEventListener('activate', (event) => {
     self.clients.claim(); // Take control of all open clients immediately
 });
 
-// Fetch Event - Network First with Cache Fallback for dynamic assets
+// Fetch Event - Network First with Cache Fallback for same-origin assets
 self.addEventListener('fetch', (event) => {
-    // Only intercept same-origin requests or specific assets
+    // Only intercept same-origin requests
     const url = new URL(event.request.url);
     const isSameOrigin = url.origin === self.location.origin;
+
+    if (!isSameOrigin) return; // Let cross-origin requests (CDN, Analytics) fail or succeed naturally
 
     event.respondWith(
         fetch(event.request)
             .then((response) => {
-                // If the response is valid, clone it and save to cache if appropriate
-                if (isSameOrigin && response && response.status === 200 && response.type === 'basic') {
+                // If the response is valid, clone it and save to cache
+                if (response && response.status === 200 && response.type === 'basic') {
                     const responseToCache = response.clone();
                     caches.open(CACHE_NAME).then((cache) => {
                         cache.put(event.request, responseToCache);
@@ -66,10 +68,7 @@ self.addEventListener('fetch', (event) => {
                         return caches.match('index.html');
                     }
 
-                    return new Response('Network error occurred', {
-                        status: 408,
-                        statusText: 'Network error occurred'
-                    });
+                    return null; // Let it fail normally if not in cache
                 });
             })
     );
