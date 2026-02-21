@@ -253,11 +253,11 @@ const generateAdvice = (Store, Utils) => {
     }
 
     // Typing effect
-    textEl.innerText = '';
+    textEl.textContent = '';
     let i = 0;
     const type = () => {
         if (i < finalAdvice.length) {
-            textEl.innerText += finalAdvice.charAt(i);
+            textEl.textContent += finalAdvice.charAt(i);
             i++;
             setTimeout(type, 30);
         }

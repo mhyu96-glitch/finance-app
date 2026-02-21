@@ -84,8 +84,9 @@
 
 #main-content {
     margin-left: 17rem;
-    transition: margin-left 0.4s cubic-bezier(0.2, 0, 0, 1);
+    transition: margin-left 0.4s cubic-bezier(0.2, 0, 0, 1), padding 0.4s ease;
     width: auto;
+    min-height: 100vh;
 }
 
 #main-content.collapsed {
@@ -112,9 +113,13 @@
 .collapsed .theme-text,
 .collapsed .sidebar-label,
 .collapsed .sidebar-footer-card {
-    opacity: 0;
-    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
     pointer-events: none;
+    position: absolute;
 }
 
 .collapsed .nav-link {
@@ -404,4 +409,53 @@
     100% {
         background-position: 100% 100%;
     }
+}
+
+/* Base Layout Enhancements */
+body {
+    background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(45, 212, 191, 0.03) 0px, transparent 50%);
+}
+
+.dark body {
+    background-image:
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
+}
+
+/* Unified Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 116, 139, 0.2);
+    border-radius: 20px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 116, 139, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Global Transitions */
+* {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
