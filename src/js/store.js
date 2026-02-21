@@ -3,9 +3,17 @@
  */
 
 // Initial Data
-export let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-export let budgets = JSON.parse(localStorage.getItem('budgets')) || [];
-export let accounts = JSON.parse(localStorage.getItem('accounts')) || [];
+export let transactions = JSON.parse(localStorage.getItem('transactions')) || [
+    { id: 101, name: "Initial Balance", amount: 15000000, type: "income", category: "Salary", date: new Date().toISOString().split('T')[0], accountId: 1 },
+    { id: 102, name: "Coffee Shop", amount: 45000, type: "expense", category: "Food", date: new Date().toISOString().split('T')[0], accountId: 1 }
+];
+export let budgets = JSON.parse(localStorage.getItem('budgets')) || [
+    { id: 1, category: "Food", limit: 2000000 },
+    { id: 2, category: "Transport", limit: 1000000 }
+];
+export let accounts = JSON.parse(localStorage.getItem('accounts')) || [
+    { id: 1, name: "Main Savings", balance: 14955000, type: "Savings", icon: "account_balance_wallet" }
+];
 export let investments = JSON.parse(localStorage.getItem('investments')) || [];
 let savingsGoal = parseFloat(localStorage.getItem('savingsGoal')) || 5000000;
 export let goals = JSON.parse(localStorage.getItem('goals')) || [];
