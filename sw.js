@@ -10,7 +10,9 @@ const ASSETS = [
     'strategy.html',
     'style.css',
     'manifest.json',
-    'src/css/premium.css'
+    'src/css/premium.css',
+    'icons/icon-192.png',
+    'icons/icon-512.png'
 ];
 
 // Install Event

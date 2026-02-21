@@ -99,71 +99,7 @@
         }
         #main-content.collapsed { margin-left: 5.5rem; }
 
-        /* Sidebar Content Visibility */
-        .sidebar-item-text, .logo-text, .theme-text, .sidebar-label, .sidebar-footer-card {
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            white-space: nowrap;
-            display: block; /* Force visible on desktop by default */
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Collapsed State Styling */
-        .collapsed .sidebar-item-text,
-        .collapsed .logo-text,
-        .collapsed .theme-text,
-        .collapsed .sidebar-label,
-        .collapsed .sidebar-footer-card {
-            opacity: 0;
-            display: none !important;
-            pointer-events: none;
-        }
-
-        .collapsed .nav-link {
-            @apply px-0 justify-center w-10 mx-auto;
-            border-radius: 0.75rem;
-        }
-
-        .collapsed .logo-container {
-            @apply flex-col gap-6 px-0 py-8 justify-start items-center;
-        }
-
-        .collapsed .logo-container .logo-title { display: none; }
-
-        /* Ensure toggle button is visible and centered in collapsed mode */
-        .collapsed .sidebar-header-toggle {
-            @apply flex items-center justify-center p-2 rounded-xl bg-white/5 hover:bg-white/10;
-        }
-
-        .collapsed .nav-link span:first-child { margin-right: 0; }
-
-        /* Mobile Adjustments */
-        @media (max-width: 1024px) {
-            #sidebar { position: fixed; left: -100% !important; width: 17rem !important; }
-            #sidebar.active { left: 0 !important; }
-            #main-content { margin-left: 0 !important; }
-            .sidebar-header-toggle { display: block; }
-        }
-
-        #sidebar.hidden-total { 
-            transform: translateX(-100%);
-            width: 0 !important;
-            border-right: none;
-        }
-
-        #main-content.full-width { 
-            margin-left: 0 !important; 
-        }
-
-        #sidebar-show-trigger {
-            @apply fixed top-6 right-6 z-[60] w-12 h-12 glass rounded-2xl flex items-center justify-center text-primary shadow-xl hover:scale-110 active:scale-95 transition-all;
-        }
-
-        #sidebar-scrim {
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            transition: opacity 0.3s ease;
-        }
+        /* Core Premium styles moved to src/css/premium.css */
 
         /* --- Advanced Micro-Animations --- */
         @keyframes fadeInUp {
