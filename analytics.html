@@ -46,93 +46,22 @@
             },
         };
     </script>
-    <style type="text/tailwindcss">
-        @layer base {
-    body {
-        @apply bg-white dark:bg-[#0a0a0c] text-slate-600 dark:text-slate-300 font-body antialiased selection:bg-indigo-500/30;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
-            radial-gradient(at 50% 50%, rgba(45, 212, 191, 0.03) 0px, transparent 50%);
-    }
-    .dark body {
-        @apply bg-[#0a0a0c] text-slate-300;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
-            radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
-    }
-    .dark {
-        color-scheme: dark;
-    }
-}
-        /* Core Premium styles moved to src/css/premium.css */
+    <style>
+        /* Specific Page Animations */
+        @keyframes fadeInUpSearch {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
-        /* Sidebar Structure - Unified */
-        #sidebar {
-            width: 17rem;
-            transition: width 0.4s cubic-bezier(0.2, 0, 0, 1);
-            overflow-x: hidden;
-            overflow-y: auto;
-            z-index: 50;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid rgba(255,255,255,0.05);
-        }
-
-        #sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-        #sidebar::-webkit-scrollbar-thumb {
-            background-color: rgba(99, 102, 241, 0.1);
-            border-radius: 20px;
-        }
-        .dark #sidebar::-webkit-scrollbar-thumb {
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-        #sidebar.collapsed { width: 5.5rem; }
-
-        #main-content {
-            margin-left: 17rem;
-            transition: margin-left 0.4s cubic-bezier(0.2, 0, 0, 1);
-            width: auto;
-        }
-        #main-content.collapsed { margin-left: 5.5rem; }
-
-        /* Core Premium styles moved to src/css/premium.css */
-
-        /* --- Advanced Micro-Animations --- */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .animate-fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .hover-lift {
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.4s ease;
-        }
-
-        .hover-lift:hover {
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
-        }
-
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
-        .stagger-6 { animation-delay: 0.6s; }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        .animate-shimmer {
-            animation: shimmer 3s infinite linear;
+            animation: fadeInUpSearch 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 

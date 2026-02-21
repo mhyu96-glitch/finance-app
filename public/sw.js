@@ -8,9 +8,9 @@ const ASSETS = [
     './ledger.html',
     './services.html',
     './strategy.html',
-    './manifest.json',
-    './icons/icon-192.png',
-    './icons/icon-512.png'
+    '/manifest.json',
+    '/icons/icon-192.png',
+    '/icons/icon-512.png'
 ];
 
 // Install Event

@@ -44,38 +44,38 @@
             },
         };
     </script>
-    <style type="text/tailwindcss">
-        @layer base {
-    body {
-        @apply bg-white dark:bg-[#0a0a0c] text-slate-600 dark:text-slate-300 font-body antialiased selection:bg-indigo-500/30;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.08) 0px, transparent 50%),
-            radial-gradient(at 50% 50%, rgba(45, 212, 191, 0.03) 0px, transparent 50%);
-    }
-    .dark body {
-        @apply bg-[#0a0a0c] text-slate-300;
-        background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.18) 0px, transparent 50%),
-            radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
-            radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
-    }
-    .dark {
-        color-scheme: dark;
-    }
-}
-    </style>
-
-    <style type="text/tailwindcss">
-        /* Core Premium styles moved to src/css/premium.css */
-        
-        /* Core Premium styles moved to src/css/premium.css */
-
+    <style>
+        /* Specific Page Styles */
         .sub-card {
-            @apply glass p-6 rounded-[2rem] border-white/5 hover:border-primary/20 transition-all cursor-pointer;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 1.5rem;
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
+
+        .dark .sub-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sub-card:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+        }
+
         .insight-badge {
-            @apply px-3 py-1 bg-primary/10 text-primary text-[9px] font-black rounded-full;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            font-size: 9px;
+            font-weight: 900;
+            border-radius: 9999px;
         }
     </style>
 </head>

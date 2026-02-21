@@ -1,57 +1,92 @@
 /* Finance Flow Premium Design System */
 
-@layer components {
-    .glass {
-        @apply bg-white/80 dark:bg-white/[0.02] backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-[0_8px_32px_rgba(0, 0, 0, 0.02)] transition-all duration-500;
-    }
-
-    .glass-premium {
-        @apply relative overflow-hidden;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
-        backdrop-filter: blur(40px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-
-    .glass-premium::before {
-        content: '';
-        @apply absolute -top-[50%] -left-[50%] w-[200%] h-[200%] rotate-45 pointer-events-none;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
-        animation: shine 8s infinite linear;
-    }
-
-    .sidebar-glass {
-        @apply bg-slate-50/80 dark:bg-[#0a0a0c]/60 backdrop-blur-2xl border-r border-black/5 dark:border-white/5;
-    }
-
-    .mesh-gradient {
-        background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #2dd4bf 100%);
-        background-size: 200% 200%;
-        animation: gradientMove 10s infinite alternate;
-    }
-
-    .active-nav {
-        @apply text-primary dark:text-white relative;
-        text-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
-    }
-
-    .dark .active-nav {
-        text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
-    }
-
-    .active-nav::after {
-        content: '';
-        @apply absolute -left-4 top-1/2 -translate-y-1/2 w-1 h-6 bg-primary rounded-r-full;
-        box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
-    }
-
-    .bento-grid {
-        display: grid;
-        grid-template-columns: repeat(12, 1fr);
-        grid-auto-rows: minmax(100px, auto);
-        gap: 1.5rem;
-    }
+.glass {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+    transition: all 0.5s ease;
 }
+
+.dark .glass {
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-premium {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.glass-premium::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    transform: rotate(45deg);
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    animation: shine 8s infinite linear;
+}
+
+.sidebar-glass {
+    background-color: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.dark .sidebar-glass {
+    background-color: rgba(10, 10, 12, 0.6);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mesh-gradient {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #2dd4bf 100%);
+    background-size: 200% 200%;
+    animation: gradientMove 10s infinite alternate;
+}
+
+.active-nav {
+    color: #6366f1;
+    position: relative;
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+}
+
+.dark .active-nav {
+    color: white;
+    text-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+.active-nav::after {
+    content: '';
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.25rem;
+    height: 1.5rem;
+    background-color: #6366f1;
+    border-top-right-radius: 9999px;
+    border-bottom-right-radius: 9999px;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.8);
+}
+
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    gap: 1.5rem;
+}
+
 
 /* Sidebar Structure - Unified */
 #sidebar {
@@ -123,12 +158,24 @@
 }
 
 .collapsed .nav-link {
-    @apply px-0 justify-center w-10 mx-auto;
+    padding-left: 0;
+    padding-right: 0;
+    justify-content: center;
+    width: 2.5rem;
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 0.75rem;
 }
 
 .collapsed .logo-container {
-    @apply flex-col gap-6 px-0 py-8 justify-start items-center;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .collapsed .logo-container .logo-title {
@@ -137,7 +184,16 @@
 
 /* Ensure toggle button is visible and centered in collapsed mode */
 .collapsed .sidebar-header-toggle {
-    @apply flex items-center justify-center p-2 rounded-xl bg-white/5 hover:bg-white/10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.collapsed .sidebar-header-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .collapsed .nav-link span:first-child {
@@ -176,7 +232,26 @@
 }
 
 #sidebar-show-trigger {
-    @apply fixed top-6 right-6 z-[60] w-12 h-12 glass rounded-2xl flex items-center justify-center text-primary shadow-xl hover:scale-110 active:scale-95 transition-all;
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 60;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6366f1;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+#sidebar-show-trigger:hover {
+    transform: scale(1.1);
+}
+
+#sidebar-show-trigger:active {
+    transform: scale(0.95);
 }
 
 #sidebar-scrim {
@@ -187,16 +262,52 @@
 
 /* Transaction Date Grouping */
 .date-group-header {
-    @apply sticky top-0 z-10 py-3 px-1 backdrop-blur-md bg-white/50 dark:bg-[#0a0a0c]/50 flex items-center gap-4 mb-2 first:mt-0 mt-6;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+    backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.dark .date-group-header {
+    background-color: rgba(10, 10, 12, 0.5);
+}
+
+.date-group-header:first-of-type {
+    margin-top: 0;
 }
 
 .date-group-label {
-    @apply text-[11px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.2em] whitespace-nowrap;
+    font-size: 11px;
+    font-weight: 900;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    white-space: nowrap;
+}
+
+.dark .date-group-label {
+    color: #64748b;
 }
 
 .date-group-header::after {
     content: '';
-    @apply h-[1px] w-full bg-slate-200 dark:bg-white/5;
+    height: 1px;
+    width: 100%;
+    background-color: #e2e8f0;
+}
+
+.dark .date-group-header::after {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .glow-border {
