@@ -151,7 +151,7 @@ export const initAIAdvisor = (Store, Utils) => {
     bubble.className = 'glass-premium p-6 rounded-[2.5rem] max-w-[300px] opacity-0 translate-y-4 transition-all duration-700 pointer-events-auto border-indigo-500/30 relative overflow-hidden';
     bubble.innerHTML = `
         <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent"></div>
-        <p id="ai-advice-text" class="text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed italic relative z-10">
+        <p id="ai-advice-text" class="text-[11px] font-bold text-slate-700 dark:text-slate-300 leading-relaxed italic relative z-10 whitespace-normal">
             Analyzing your spending trajectory...
         </p>
     `;

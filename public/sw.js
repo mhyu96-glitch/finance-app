@@ -1,18 +1,16 @@
 const CACHE_NAME = 'finance-flow-v2'; // Increment version to force update
 const ASSETS = [
     './',
-    'index.html',
-    'accounts.html',
-    'analytics.html',
-    'budgets.html',
-    'ledger.html',
-    'services.html',
-    'strategy.html',
-    'style.css',
-    'manifest.json',
-    'src/css/premium.css',
-    'icons/icon-192.png',
-    'icons/icon-512.png'
+    './index.html',
+    './accounts.html',
+    './analytics.html',
+    './budgets.html',
+    './ledger.html',
+    './services.html',
+    './strategy.html',
+    './manifest.json',
+    './icons/icon-192.png',
+    './icons/icon-512.png'
 ];
 
 // Install Event

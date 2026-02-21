@@ -98,11 +98,12 @@
 .theme-text,
 .sidebar-label,
 .sidebar-footer-card {
-    transition: opacity 0.2s ease, transform 0.2s ease;
-    white-space: nowrap;
-    display: block;
     opacity: 1;
     transform: translateX(0);
+}
+
+.sidebar-footer-card {
+    white-space: normal !important;
 }
 
 /* Collapsed State Styling */
