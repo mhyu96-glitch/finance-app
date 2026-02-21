@@ -1,4 +1,4 @@
-const CACHE_NAME = 'finance-flow-v1';
+const CACHE_NAME = 'finance-flow-v2'; // Increment version to force update
 const ASSETS = [
     './',
     'index.html',
@@ -9,34 +9,16 @@ const ASSETS = [
     'services.html',
     'strategy.html',
     'style.css',
-    'src/js/main.js',
-    'src/js/ui.js',
-    'src/js/store.js',
-    'src/js/utils.js',
-    'src/js/translations.js',
-    'src/js/charts.js',
-    'src/js/pages/dashboard.js',
-    'src/js/pages/analytics.js',
-    'src/js/pages/budgets.js',
-    'src/js/pages/accounts.js',
-    'src/js/pages/ledger.js',
-    'src/js/pages/strategy.js',
-    'src/js/pages/services.js',
-    'src/js/pages/gamification.js',
-    'src/js/pages/onboarding.js',
-    'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap',
-    'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap',
-    'https://cdn.tailwindcss.com?plugins=forms,typography,container-queries',
-    'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js',
-    'https://cdn.jsdelivr.net/npm/chart.js',
-    'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'
+    'manifest.json'
 ];
 
 // Install Event
 self.addEventListener('install', (event) => {
+    self.skipWaiting(); // Force the waiting service worker to become the active service worker
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS);
+            console.log('SW: Pre-caching core assets');
+            return cache.addAll(ASSETS).catch(err => console.log('SW: Pre-cache failed (ignoring some assets)', err));
         })
     );
 });
@@ -46,17 +28,49 @@ self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
-                keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
+                keys.filter((key) => key !== CACHE_NAME).map((key) => {
+                    console.log('SW: Clearing old cache', key);
+                    return caches.delete(key);
+                })
             );
         })
     );
+    self.clients.claim(); // Take control of all open clients immediately
 });
 
-// Fetch Event
+// Fetch Event - Network First with Cache Fallback for dynamic assets
 self.addEventListener('fetch', (event) => {
+    // Only intercept same-origin requests or specific assets
+    const url = new URL(event.request.url);
+    const isSameOrigin = url.origin === self.location.origin;
+
     event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
-        })
+        fetch(event.request)
+            .then((response) => {
+                // If the response is valid, clone it and save to cache if appropriate
+                if (isSameOrigin && response && response.status === 200 && response.type === 'basic') {
+                    const responseToCache = response.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
+                }
+                return response;
+            })
+            .catch(() => {
+                // Fallback to cache if network fails
+                return caches.match(event.request).then((cachedResponse) => {
+                    if (cachedResponse) return cachedResponse;
+
+                    // Specific fallback for navigation requests
+                    if (event.request.mode === 'navigate') {
+                        return caches.match('index.html');
+                    }
+
+                    return new Response('Network error occurred', {
+                        status: 408,
+                        statusText: 'Network error occurred'
+                    });
+                });
+            })
     );
 });
