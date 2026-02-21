@@ -9,7 +9,8 @@ const ASSETS = [
     'services.html',
     'strategy.html',
     'style.css',
-    'manifest.json'
+    'manifest.json',
+    'src/css/premium.css'
 ];
 
 // Install Event
